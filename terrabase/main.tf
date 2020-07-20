@@ -46,31 +46,28 @@ resource "aws_route_table" "terraform_rt" {
   }
 }
 
-#variable "subnet_id" {}
-#data "aws_subnet" "selected" {
-#  id = var.subnet_id
-#  }
+resource "aws_route_table_association" "rt_subnet_association" {
+  count          = length(aws_subnet.public_subnets.*.id)
+  subnet_id      = element( aws_subnet.public_subnets.*.id , count.index)
+  route_table_id = aws_route_table.terraform_rt.id
+}
 
-#resource "aws_route_table_association" "rt_subnet_association" {
-
-#  subnet_id      = aws_subnet.selected.id
+#resource "aws_route_table_association" "rt_private_subnet_association" {
+#  count          = length(aws_subnet.private_subnets.*.id)
+#  subnet_id      = element( aws_subnet.private_subnets.*.id , count.index)
 #  route_table_id = aws_route_table.terraform_rt.id
 #}
 
-#resource "aws_eip" "terraform_eip" {
-#  # instance = "${aws_instance.web.id}"
-#  # vpc      = true
-#}
-#resource "aws_nat_gateway" "terraform_NAT" {
-#  allocation_id = aws_eip.terraform_eip.id
-#  subnet_id     = aws_subnet.private_subnet_1.id
-#
-#  # depends_on = [aws_internet_gateway.terraform_IGW]
-#
-#  tags = {
-#    Name = var.terraform_nat_tag_name
-#  }
-#}
+resource "aws_eip" "terraform_eip" {  
+}
+resource "aws_nat_gateway" "terraform_NAT" {
+  allocation_id = aws_eip.terraform_eip.id
+  subnet_id     = aws_subnet.private_subnets.0.id
+
+  tags = {
+    Name = var.terraform_nat_tag_name
+  }
+}
 #resource "aws_instance" "terraform_public_web" {
 #  ami           = var.web_ami
 #  instance_type = var.instance_type
