@@ -16,3 +16,4 @@ private_web_tag_name = "terraform_private_instance"
 
 public_subnet_name_tag = "public_subnet"
 private_subnet_name_tag = "private_subnet"
+dynamo_db = "terraform-locks"

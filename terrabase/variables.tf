@@ -21,4 +21,6 @@ variable "instance_type" {}
 variable "public_web_tag_name" {}
 variable "private_web_tag_name" {}
 
+variable "dynamo_db" {}
+
 
